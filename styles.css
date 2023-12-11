@@ -77,6 +77,11 @@ p {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+.dropdown-icon {
+  font-size: 24px;
+  margin-right: 8px; 
+}
+
 #about,
 #how-it-works,
 #for-buyers,
@@ -215,4 +220,38 @@ select {
   font-size: 14px;
   font-weight: bold;
   margin-bottom: 5px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  right: 0;
+}
+
+.dropdown-content a {
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  color: #333;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.dropdown-icon {
+  cursor: pointer;
+  padding-left: 8px; 
+  color: #333;/
+  font-size: 16px;
 }
