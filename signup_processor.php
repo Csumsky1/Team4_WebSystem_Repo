@@ -4,7 +4,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $last_name = $_POST["last_name"];
     $email = $_POST["email"];
     $username = $_POST["username"];
-    $password = $_POST["password1"];
+    $password = $_POST["password"];
     $account_type = $_POST["account_type"];
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     $host = "localhost";
@@ -18,13 +18,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Check if the email already exists
+    //check if the email already exists
     $checkEmailQuery = $mysqli->prepare("SELECT id FROM user_data WHERE email = ?");
     $checkEmailQuery->bind_param("s", $email);
     $checkEmailQuery->execute();
     $emailResult = $checkEmailQuery->get_result();
 
-    // Check if the username already exists
+    //check if the username already exists
     $checkUsernameQuery = $mysqli->prepare("SELECT id FROM user_data WHERE username = ?");
     $checkUsernameQuery->bind_param("s", $username);
     $checkUsernameQuery->execute();
@@ -60,17 +60,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         account_type VARCHAR(20) NOT NULL
     )";
 
-    // Sending response to AJAX
+    //sending response to AJAX
     if (!$mysqli->query($createTableSQL)) {
         echo json_encode(["error" => "Error creating table: " . $mysqli->error]);
         exit();
     }
 
-    // Prepared statements for security, also binds statement for data insertion
+    //prepared statements for security, also binds statement for data insertion
     $stmt = $mysqli->prepare("INSERT INTO user_data (first_name, last_name, email, username, password, account_type) VALUES (?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssssss", $first_name, $last_name, $email, $username, $hashed_password, $account_type);
 
-    // Sending response to AJAX
+    //sending response to AJAX
     if (!$stmt->execute()) {
         echo json_encode(["error" => "Error: " . $stmt->error]);
         exit();
@@ -79,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
     $mysqli->close();
     
-    // Include a success message in the response
+    //include a success message in the response
     echo json_encode(["success" => "Thank you for creating an account!\nPlease go ahead and login."]);
 }
 ?>

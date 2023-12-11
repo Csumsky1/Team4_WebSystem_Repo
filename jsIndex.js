@@ -70,6 +70,60 @@ function submitForm(event) {
   });
 }
 
+function login(event) {
+  event.preventDefault();
+
+  var formData = {
+    email: $('#email2').val(), 
+    password: $('#password2').val() 
+  };
+
+  console.log('Login Data:', formData);
+
+  $.ajax({
+    type: 'POST',
+    url: 'login_processor.php', 
+    data: formData,
+    success: function(response) {
+      console.log('Server response:', response);
+      var jsonResponse = JSON.parse(response);
+
+      if (jsonResponse.hasOwnProperty("success")) {
+        var accountType = jsonResponse.account_type;
+
+        if (accountType === "Admin" || accountType === "admin") {
+          window.location.href = "adminDash.php";
+        } else {
+          window.location.href = "home.php";
+        }
+
+        clearLoginForm();
+      } else if (jsonResponse.hasOwnProperty("error")) {
+        displayLoginErrorMessage(jsonResponse.error);
+      }
+    },
+    error: function(_, status, error) {
+      console.error('AJAX request failed:', status, error);
+      displayLoginErrorMessage("An error occurred. Please try again later."); 
+    }
+  });
+}
+
+function displayLoginErrorMessage(message) {
+  var errorMessageElement = $('#loginErrorMessage');
+  errorMessageElement.text(message);
+  errorMessageElement.show(); 
+  $('.login-error').text(message);
+}
+
+
+function clearLoginForm() {
+  $('#email').val('');
+  $('#password').val('');
+  $('.login-error').text('');
+}
+
+
 function displayErrorMessage(errorMessage) {
   $('.error').text(errorMessage + ". Please choose a different one.");
 }
@@ -93,3 +147,13 @@ function clearForm() {
 function clearSuccessMessage() {
   $('.success').text('');
 }
+
+function toggleDropdown() {
+    var dropdownContent = document.getElementById("logoutDropdown");
+    if (dropdownContent.style.display === "block") {
+        dropdownContent.style.display = "none";
+    } else {
+        dropdownContent.style.display = "block";
+    }
+}
+
